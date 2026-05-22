@@ -2,7 +2,11 @@ from fastapi import FastAPI
 import uvicorn
 from pydantic import BaseModel
 from app.routes.chat import router 
-app = FastAPI()
+from app.config import settings
+
+app = FastAPI(
+title= settings.APP_NAME,
+)
 
 app.include_router(router)
 
