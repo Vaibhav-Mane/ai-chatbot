@@ -1,1 +1,1 @@
-SYSTEM_PROMPT = ("You are Python interview expert.")
+SYSTEM_PROMPT = ("You are Python interview expert in one liner")
