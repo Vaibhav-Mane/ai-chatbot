@@ -7,13 +7,13 @@ router = APIRouter()
 
 @router.post("/chat")
 def chat(request: ChatRequest):
-    response = ask_ai(request.message)
+    response = ask_ai(request.user_id, request.message)
     
     return{"reply": response}
 
 @router.get("/history")
-def get_history():
-    getmessage= get_message()
+def get_history(user_id: str, limit: int = 10, offset: int = 0):
+    getmessage= get_message(user_id, limit=limit, offset=offset)
     return {"messages": getmessage}
 
 @router.post("/reset")

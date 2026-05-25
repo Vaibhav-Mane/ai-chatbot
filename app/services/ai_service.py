@@ -27,10 +27,10 @@ from app.services.memory_service import add_message, get_message
 
 
 ##################### for ollama ###########################
-def ask_ai(question: str):
+def ask_ai(user_id: str, question: str):
 
     try:
-        add_message("user", question)
+        add_message(user_id, "user", question)
         
         messages = [
             {
@@ -40,14 +40,14 @@ def ask_ai(question: str):
         ]
         
         messages.extend(
-            get_message())
+            get_message(user_id))
         
         respopnse = chat(
             model= "llama3.2",
             messages = messages)
         
         ai_reply = respopnse["message"]["content"]
-        add_message("assistant", ai_reply)
+        add_message(user_id, "assistant", ai_reply)
 
         return {
                 "success": True,
