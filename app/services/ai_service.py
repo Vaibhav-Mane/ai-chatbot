@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from app.services.prompt_service import SYSTEM_PROMPT
 from app.config import settings
 from app.services.memory_service import add_message, get_message
+from app.services.summary_service import save_summary, get_summary
 
 # client = OpenAI(
 #     api_key=settings.OPEN_API_KEY
@@ -33,10 +34,18 @@ def ask_ai(user_id: str, question: str):
         add_message(user_id, "user", question)
         
         messages = [
+
             {
-            "role": "system",
-            "content": SYSTEM_PROMPT
+                "role":"system",
+                "content":SYSTEM_PROMPT
+            },
+
+            {
+                "role":"system",
+                "content":
+                f"Conversation summary: {get_summary()}"
             }
+
         ]
         
         messages.extend(
