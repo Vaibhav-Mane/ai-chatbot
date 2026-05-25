@@ -1,6 +1,6 @@
 from openai import OpenAI
 from ollama import chat
-import google.generativeai as genai
+# import google.generativeai as genai
 from dotenv import load_dotenv
 from app.services.prompt_service import SYSTEM_PROMPT
 from app.config import settings
@@ -9,11 +9,11 @@ from app.services.memory_service import add_message, get_message
 # client = OpenAI(
 #     api_key=settings.OPEN_API_KEY
 # )
-genai.configure(api_key=settings.GEMINI_API_KEY)
+# genai.configure(api_key=settings.GEMINI_API_KEY)
 
-model = genai.GenerativeModel(
-    "gemini-2.0-flash"
-)
+# model = genai.GenerativeModel(
+#     "gemini-2.0-flash"
+# )
 ##########################for openai###############################
 # def ask_ai(question: str):
 #     response = client.chat.completions.create(

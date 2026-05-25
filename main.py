@@ -3,6 +3,11 @@ import uvicorn
 from pydantic import BaseModel
 from app.routes.chat import router 
 from app.config import settings
+from app.database import engine, Base
+from app.models.chat_models import Chat
+
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
 title= settings.APP_NAME,
