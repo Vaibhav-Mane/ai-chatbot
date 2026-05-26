@@ -29,7 +29,7 @@ from app.services.summary_service import genrate_summary
 
 
 ##################### for ollama ###########################
-def ask_ai(user_id: str, question: str):
+def ask_ai(user_id: str, question: str, background_tasks):
 
     try:
         add_message(user_id, "user", question)
@@ -38,10 +38,7 @@ def ask_ai(user_id: str, question: str):
         )
 
         if len(history) >= 5:
-
-            genrate_summary(
-                history
-            )
+            background_tasks.add_task(genrate_summary, history)
         
         messages = [
 

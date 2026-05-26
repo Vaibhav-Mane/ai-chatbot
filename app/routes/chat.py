@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 from app.schemas.chat_schema import ChatRequest
 from app.services.ai_service import ask_ai
 from app.services.memory_service import clear_history, get_message
@@ -7,8 +7,8 @@ from app.services.summary_service import get_summary
 router = APIRouter()
 
 @router.post("/chat")
-def chat(request: ChatRequest):
-    response = ask_ai(request.user_id, request.message)
+def chat(request: ChatRequest, background_tasks: BackgroundTasks):
+    response = ask_ai(request.user_id, request.message, background_tasks)
     
     return{"reply": response}
 

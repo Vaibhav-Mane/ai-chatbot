@@ -22,6 +22,8 @@ def genrate_summary(messages):
         conversation_summary = (
             response["message"]["content"]
         )
+        print("Running in background...")
+        print("Generating summary...")
         print("\n===== SUMMARY CREATED =====")
         print(conversation_summary)
         print("===========================\n")
