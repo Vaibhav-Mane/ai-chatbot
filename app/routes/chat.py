@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from app.schemas.chat_schema import ChatRequest
 from app.services.ai_service import ask_ai
 from app.services.memory_service import clear_history, get_message
+from app.services.summary_service import get_summary
 
 router = APIRouter()
 
@@ -22,4 +23,14 @@ def reset():
     return {
         "success": True,
         "message": "chat history cleared"
+    }
+
+@router.get("/summary")
+def summary():
+
+    return {
+
+        "summary":
+        get_summary()
+
     }
