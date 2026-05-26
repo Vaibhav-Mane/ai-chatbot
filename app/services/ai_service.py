@@ -7,6 +7,7 @@ from app.config import settings
 from app.services.memory_service import add_message, get_message
 from app.services.summary_service import get_summary
 from app.services.summary_service import genrate_summary
+from app.services.token_service import estimate_token                                                                                                                                                                                                                                                                                                             
 
 # client = OpenAI(
 #     api_key=settings.OPEN_API_KEY
@@ -57,6 +58,13 @@ def ask_ai(user_id: str, question: str, background_tasks):
         
         messages.extend(
             get_message(user_id))
+        
+        estimated_tokens = estimate_token(messages)
+        print(f"Estimated tokens: {estimated_tokens}")
+        
+        if estimated_tokens > 300:
+            messages = messages[-10:]
+        print("trimmed context")
         
         respopnse = chat(
             model= "llama3.2",
