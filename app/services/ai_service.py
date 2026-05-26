@@ -56,15 +56,22 @@ def ask_ai(user_id: str, question: str, background_tasks):
 
         ]
         
-        messages.extend(
-            get_message(user_id))
+        messages.extend(history)
         
         estimated_tokens = estimate_token(messages)
         print(f"Estimated tokens: {estimated_tokens}")
         
+        messages.extend(history)
+
+        estimated_tokens = estimate_token(messages)
+
+        print(
+            f"Estimated tokens: {estimated_tokens}"
+        )
+        
         if estimated_tokens > 300:
             messages = messages[-10:]
-        print("trimmed context")
+            print("trimmed context")
         
         respopnse = chat(
             model= "llama3.2",

@@ -1,6 +1,11 @@
+import tiktoken 
+
 def estimate_token(messages):
+    encoding = tiktoken.get_encoding("cl100k_base")
+    
     total = 0
     for m in messages:
-        words = len(m["content"].split())
-        total += words
-        return total
+        tokens  = encoding.encode(m["content"])    
+        total += len(tokens)
+        
+    return total
