@@ -4,10 +4,13 @@ from ollama import chat
 from dotenv import load_dotenv
 from app.services.prompt_service import SYSTEM_PROMPT
 from app.config import settings
-from app.services.memory_service import add_message, get_message
+from app.services.memory_service import add_message, get_message, save_memory, find_similar_memory
 from app.services.summary_service import get_summary
 from app.services.summary_service import genrate_summary
-from app.services.token_service import estimate_token                                                                                                                                                                                                                                                                                                             
+from app.services.token_service import estimate_token
+from app.services.rag_service import (
+    retrieve_knowledge
+)                                                                                                                                                                                                                                                                                                            
 
 # client = OpenAI(
 #     api_key=settings.OPEN_API_KEY
@@ -34,13 +37,34 @@ def ask_ai(user_id: str, question: str, background_tasks):
 
     try:
         add_message(user_id, "user", question)
+        
         history = get_message(
             user_id
         )
-
+        
+        memories = find_similar_memory(
+            user_id,
+            question
+        )
+        
+        save_memory(
+            user_id,
+            question
+        )
+        
         if len(history) >= 5:
             background_tasks.add_task(genrate_summary, history)
-        
+            
+        knowledge = retrieve_knowledge(
+            question
+        )
+
+        print(
+            f"KNOWLEDGE: {knowledge}"
+        )
+        print("\n=== RELEVANT MEMORIES ===")
+        print(memories)
+        print("=========================")
         messages = [
 
             {
@@ -51,9 +75,21 @@ def ask_ai(user_id: str, question: str, background_tasks):
             {
                 "role":"system",
                 "content":
-                f"Conversation summary: {get_summary()}"
-            }
+                f"Relevant memories:{get_summary()}"
+            },
+            {
+                "role":"system",
+                "content":
+                f"Relevant memories:{memories}"
+            },
+            {
 
+                "role":"system",
+
+                "content":
+                f"Knowledge base:{knowledge}"
+
+            }
         ]
         
         messages.extend(history)
@@ -61,8 +97,6 @@ def ask_ai(user_id: str, question: str, background_tasks):
         estimated_tokens = estimate_token(messages)
         print(f"Estimated tokens: {estimated_tokens}")
         
-        messages.extend(history)
-
         estimated_tokens = estimate_token(messages)
 
         print(

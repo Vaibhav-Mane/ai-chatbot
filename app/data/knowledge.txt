@@ -1,0 +1,9 @@
+FastAPI is a modern Python web framework.
+
+FastAPI supports async programming.
+
+SQLAlchemy is used for ORM operations.
+
+Ollama allows running local LLMs.
+
+Embeddings convert text into vectors.
