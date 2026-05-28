@@ -17,7 +17,9 @@ class Memory(Base):
     user_id=Column(
         String
     )
-
+    
+    session_id=Column(String)
+    
     text=Column(
         String
     )

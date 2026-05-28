@@ -48,22 +48,25 @@ def stream_response(response):
     return full_reply
 
 
-def ask_ai(user_id: str, question: str, background_tasks):
+def ask_ai(user_id: str, session_id: str, question: str, background_tasks):
 
     try:
-        add_message(user_id, "user", question)
+        add_message(user_id, session_id, "user", question)
         
         history = get_message(
-            user_id
+            user_id,
+            session_id
         )
-        
         memories = find_similar_memory(
             user_id,
+            session_id,
             question
         )
         
+        
         save_memory(
             user_id,
+            session_id,
             question
         )
         
@@ -142,6 +145,7 @@ def ask_ai(user_id: str, question: str, background_tasks):
 
             add_message(
                 user_id,
+                session_id,
                 "assistant",
                 full_reply
             )

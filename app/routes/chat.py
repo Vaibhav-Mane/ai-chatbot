@@ -9,13 +9,13 @@ router = APIRouter()
 
 @router.post("/chat")
 def chat(request: ChatRequest, background_tasks: BackgroundTasks):
-    generator = ask_ai(request.user_id, request.message, background_tasks)
+    generator = ask_ai(request.user_id, request.session_id, request.message, background_tasks)
     
     return StreamingResponse(generator, media_type="text/plain")
 
 @router.get("/history")
-def get_history(user_id: str, limit: int = 10, offset: int = 0):
-    getmessage= get_message(user_id, limit=limit, offset=offset)
+def get_history(user_id: str, session_id: str, limit: int = 10, offset: int = 0):
+    getmessage= get_message(user_id, session_id, limit=limit, offset=offset)
     return {"messages": getmessage}
 
 @router.post("/reset")

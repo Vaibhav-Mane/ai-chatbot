@@ -10,17 +10,17 @@ from app.services.embedding_service import (
 
 chat_history = []
 
-def add_message(user_id, role, content):
+def add_message(user_id, session_id, role, content):
     db= SessionLocal()
-    message = Chat(user_id=user_id, role=role, content=content)
+    message = Chat(user_id=user_id, session_id=session_id, role=role, content=content)
     db.add(message)
     db.commit()
     db.close()
 
-def get_message(user_id,limit=10, offset=0):
+def get_message(user_id, session_id, limit=10, offset=0):
     db= SessionLocal()
     messages = (db.query(Chat)
-                .filter(Chat.user_id == user_id)
+                .filter(Chat.user_id == user_id, Chat.session_id == session_id)
                 .order_by(Chat.id.desc())
                 .limit(limit)
                 .offset(offset)
@@ -38,6 +38,7 @@ def clear_history():
 
 def save_memory(
     user_id,
+    session_id,
     text
 ):
 
@@ -46,10 +47,13 @@ def save_memory(
     embedding=create_embedding(
         text
     )
-
+    
+    
     memory=Memory(
 
         user_id=user_id,
+
+        session_id=session_id,
 
         text=text,
 
@@ -67,6 +71,7 @@ def save_memory(
 
 def find_similar_memory(
     user_id,
+    session_id,
     question
 ):
 
@@ -83,7 +88,8 @@ def find_similar_memory(
         db.query(Memory)
 
         .filter(
-            Memory.user_id==user_id
+            Memory.user_id==user_id,
+            Memory.session_id==session_id
         )
 
         .all()

@@ -6,6 +6,7 @@ class Chat(Base):
     __tablename__ = "chat_history"
     id = Column(Integer, primary_key=True)
     user_id = Column(String)
+    session_id = Column(String)
     role = Column(String)
     content = Column(String)
     created_at = Column(
