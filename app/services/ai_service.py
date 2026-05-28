@@ -33,6 +33,21 @@ from app.services.rag_service import (
 
 
 ##################### for ollama ###########################
+def stream_response(response):
+
+    full_reply = ""
+
+    for chunk in response:
+
+        content = chunk["message"]["content"]
+
+        full_reply += content
+
+        yield content
+
+    return full_reply
+
+
 def ask_ai(user_id: str, question: str, background_tasks):
 
     try:
@@ -107,17 +122,32 @@ def ask_ai(user_id: str, question: str, background_tasks):
             messages = messages[-10:]
             print("trimmed context")
         
-        respopnse = chat(
+        response = chat(
             model= "llama3.2",
-            messages = messages)
+            messages = messages,
+            stream = True
+            )
         
-        ai_reply = respopnse["message"]["content"]
-        add_message(user_id, "assistant", ai_reply)
+        def generate():
 
-        return {
-                "success": True,
-                "data": ai_reply
-                }        
+            full_reply = ""
+
+            for chunk in response:
+
+                content = chunk["message"]["content"]
+
+                full_reply += content
+
+                yield content
+
+            add_message(
+                user_id,
+                "assistant",
+                full_reply
+            )
+
+        return generate()
+             
 
     except Exception as e:
 

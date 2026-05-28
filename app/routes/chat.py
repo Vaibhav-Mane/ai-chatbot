@@ -3,14 +3,15 @@ from app.schemas.chat_schema import ChatRequest
 from app.services.ai_service import ask_ai
 from app.services.memory_service import clear_history, get_message
 from app.services.summary_service import get_summary
+from fastapi.responses import StreamingResponse
 
 router = APIRouter()
 
 @router.post("/chat")
 def chat(request: ChatRequest, background_tasks: BackgroundTasks):
-    response = ask_ai(request.user_id, request.message, background_tasks)
+    generator = ask_ai(request.user_id, request.message, background_tasks)
     
-    return{"reply": response}
+    return StreamingResponse(generator, media_type="text/plain")
 
 @router.get("/history")
 def get_history(user_id: str, limit: int = 10, offset: int = 0):
