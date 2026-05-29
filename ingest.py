@@ -1,21 +1,41 @@
 from app.services.knowledge_service import (
     save_knowledge
 )
+from app.utils.chunking import chunk_text
 
-knowledge = [
+documents = {
 
-    "FastAPI is a Python framework",
+    "fastapi_doc": """
 
-    "Ollama runs local LLMs",
+    FastAPI is a modern Python framework.
 
-    "Embeddings convert text into vectors",
+    FastAPI supports async APIs.
 
-    "SQLAlchemy is an ORM"
+    """,
 
-]
+    "ai_doc": """
 
-for item in knowledge:
+    Embeddings convert text into vectors.
 
-    save_knowledge(item)
+    RAG means Retrieval Augmented Generation.
 
-print("Knowledge ingested")
+    """
+
+}
+
+
+for doc_name, content in documents.items():
+
+    chunks = chunk_text(
+        content,
+        chunk_size=5
+    )
+
+    for chunk in chunks:
+
+        save_knowledge(
+            doc_name,
+            chunk
+        )
+
+print("Chunk ingestion completed")

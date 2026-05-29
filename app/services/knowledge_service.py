@@ -9,7 +9,7 @@ from app.services.embedding_service import (
 )
 
 
-def save_knowledge(text):
+def save_knowledge(text,document_name):
 
     db = SessionLocal()
 
@@ -36,6 +36,7 @@ def save_knowledge(text):
     row = Knowledge(
 
         text=text,
+        document_name=document_name,
 
         embedding=json.dumps(
             embedding

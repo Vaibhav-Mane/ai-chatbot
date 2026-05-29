@@ -21,6 +21,12 @@ def retrieve_knowledge(question):
             row.embedding
         )
 
+        print(
+        f"{row.document_name}"
+        f" -> {row.text}"
+        f" -> {score}"
+            )
+        
         score = cosine_similarity(
 
             question_embedding,

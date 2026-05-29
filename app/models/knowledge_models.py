@@ -15,7 +15,9 @@ class Knowledge(Base):
         Integer,
         primary_key=True
     )
-
+    
+    document_name = Column(String)
+    
     text = Column(String)
 
     embedding = Column(String)
