@@ -5,7 +5,7 @@ from app.routes.chat import router
 from app.config import settings
 from app.database import engine, Base
 from app.models.chat_models import Chat
-
+from app.models.knowledge_models import Knowledge
 
 Base.metadata.create_all(bind=engine)
 

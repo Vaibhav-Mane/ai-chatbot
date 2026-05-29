@@ -2,68 +2,41 @@ from app.services.embedding_service import (
     create_embedding,
     cosine_similarity
 )
-
-
-def load_knowledge():
-
-    with open(
-        "app/data/knowledge.txt",
-        "r"
-    ) as f:
-
-        data = f.readlines()
-
-    return [
-        line.strip()
-        for line in data
-        if line.strip()
-    ]
-
-
-knowledge_base = []
-
-for text in load_knowledge():
-
-    knowledge_base.append(
-
-        {
-
-            "text": text,
-
-            "embedding":
-            create_embedding(text)
-
-        }
-
-    )
-
+from app.database import SessionLocal
+from app.models.knowledge_models import Knowledge
+import json
 
 def retrieve_knowledge(question):
-
+    db = SessionLocal()
+    
     question_embedding = (
         create_embedding(question)
     )
-
+    rows = db.query(Knowledge).all()
+    
     best_match = []
 
-    for item in knowledge_base:
+    for row in rows:
+        emb = json.loads(
+            row.embedding
+        )
 
         score = cosine_similarity(
 
             question_embedding,
 
-            item["embedding"]
+            emb
 
         )
 
         print(
-            f"{item['text']} -> {score}"
+            f"{row.text} -> {score}"
         )
 
         if score > 0.5:
 
             best_match.append(
-                item["text"]
+                row.text
             )
-
+    db.close()
     return best_match
